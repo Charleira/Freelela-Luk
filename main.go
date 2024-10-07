@@ -15,6 +15,7 @@ var PORT = 3018
 var gAppVersion string = "development"
 
 func main() {
+	// vai tomar no CU LUK
 	// Verifica se a variável de ambiente APP_PORT foi definida
 	if port, ok := os.LookupEnv("APP_PORT"); ok {
 		PORT, _ = strconv.Atoi(port)
