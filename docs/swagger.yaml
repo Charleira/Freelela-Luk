@@ -1,4 +1,42 @@
+definitions:
+  errors_model.ErrorModel:
+    properties:
+      id:
+        type: integer
+      msg:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /users:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Cria um novo usuário no sistema com as informações fornecidas
+      parameters:
+      - description: Id do Sistema
+        in: path
+        name: systemid
+        required: true
+        type: string
+      - description: Arquivos de usuários para upload
+        in: formData
+        name: files
+        required: true
+        type: file
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/errors_model.ErrorModel'
+            type: array
+      summary: Cria um novo usuário
+      tags:
+      - User
 swagger: "2.0"

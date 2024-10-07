@@ -3,5 +3,64 @@
     "info": {
         "contact": {}
     },
-    "paths": {}
+    "paths": {
+        "/users": {
+            "post": {
+                "description": "Cria um novo usuário no sistema com as informações fornecidas",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Cria um novo usuário",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id do Sistema",
+                        "name": "systemid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Arquivos de usuários para upload",
+                        "name": "files",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/errors_model.ErrorModel"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "errors_model.ErrorModel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }

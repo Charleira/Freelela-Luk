@@ -3,6 +3,8 @@ package driverController
 import (
 	"net/http"
 
+	"github.com/Charleira/FreelelaLuk/errors"
+	errors_model "github.com/Charleira/FreelelaLuk/model/errors-model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,25 +15,23 @@ import (
 // @Param		systemid		path		string							true	"Id do Sistema"
 // @Param		files			formData	file							true	"Arquivos de usuários para upload"
 // @Success		201				{object}	int
-// @Failure		400				{object}	[]error_model.ErrorModel
-// @Router		/system/{systemid}/users [post]
+// @Failure		400				{object}	[]errors_model.ErrorModel
+// @Router		/users [post]
 func CreateUser(c *gin.Context) {
 
 	// Verifica se foram fornecidos arquivos
 	form, err := c.MultipartForm()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Erro ao processar os arquivos enviados"})
+
+		c.JSON(http.StatusBadRequest, []errors_model.ErrorModel{errors.BodyParser})
 		return
 	}
-
-	// Inicializa um slice para armazenar os resultados
-	var uploadResults []interface{}
 
 	// Itera sobre os arquivos enviados
 	for _, fileHeaders := range form.File["files"] {
 		file, err := fileHeaders.Open()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao abrir o arquivo"})
+			c.JSON(http.StatusInternalServerError, []errors_model.ErrorModel{errors.BodyParser})
 			return
 		}
 		defer file.Close()
@@ -39,5 +39,5 @@ func CreateUser(c *gin.Context) {
 	}
 
 	// Retorna a resposta com os resultados do upload
-	c.JSON(http.StatusOK, uploadResults)
+	c.JSON(http.StatusOK, 1)
 }
