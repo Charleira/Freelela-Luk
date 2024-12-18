@@ -8,7 +8,8 @@ import (
 	"github.com/Charleira/FreelelaLuk/controllers"
 	"github.com/Charleira/FreelelaLuk/docs"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	swagger "github.com/gofiber/swagger"
 )
 
 var PORT = 3018
@@ -30,16 +31,22 @@ func main() {
 		docs.SwaggerInfo.Host = "myapp-production.com"
 	}
 
-	// Inicializa o servidor Gin
-	router := gin.Default()
+	// Inicializa o servidor Fiber
+	app := fiber.New()
+
+	// Configura o Swagger
+	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	// Adiciona as rotas dos controladores
-	controllers.AddRoutes(router)
+	controllers.AddRoutes(app)
 
 	// Exibe informações no console
 	fmt.Printf("API Version: %s\n", gAppVersion)
 	fmt.Printf("Rodando na porta: %d\n", PORT)
 
 	// Inicia o servidor na porta configurada
-	router.Run(fmt.Sprintf(":%d", PORT))
+	err := app.Listen(fmt.Sprintf(":%d", PORT))
+	if err != nil {
+		fmt.Printf("Erro ao iniciar o servidor: %v\n", err)
+	}
 }
